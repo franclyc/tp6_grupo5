@@ -4,6 +4,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import ar.edu.unju.escmi.tp6.exceptions.LimiteTarjetaInsuficienteException;
+import ar.edu.unju.escmi.tp6.exceptions.MontoExcedidoException;
+
 public class Credito {
     private double montoCredito; // Atributo que faltaba del diagrama
     private TarjetaCredito tarjetaCredito;
@@ -13,6 +16,19 @@ public class Credito {
     public Credito() {}
 
     public Credito(TarjetaCredito tarjetaCredito, Factura factura, List<Cuota> cuotas) {
+        double total = factura.calcularTotal();
+        double totalTelefonos = 0;
+        for (Detalle detalle : factura.getDetalles()) {
+            if (detalle.getProducto().isEsTelefono()) {
+                totalTelefonos += detalle.getImporte();
+            }
+        }
+        if (total > 2500000 || totalTelefonos > 1000000) {
+            throw new MontoExcedidoException("El monto de la compra supera el limite permitido por Ahora 20");
+        }
+        if (total > tarjetaCredito.getLimiteCompra()) {
+            throw new LimiteTarjetaInsuficienteException("La tarjeta no tiene limite suficiente para la compra");
+        }
         this.tarjetaCredito = tarjetaCredito;
         this.factura = factura;
         this.cuotas = cuotas;

@@ -1,5 +1,7 @@
 package ar.edu.unju.escmi.tp6.dominio;
 
+import ar.edu.unju.escmi.tp6.exceptions.StockInsuficienteException;
+
 public class Stock {
      private int cantidad;
      private Producto producto;
@@ -28,6 +30,8 @@ public class Stock {
     public void decrementarStock(int cantidadVendida) {
         if(validarStockDisponible(cantidadVendida)) {
             this.cantidad -= cantidadVendida;
+        } else {
+            throw new StockInsuficienteException("Stock insuficiente. Disponible: " + this.cantidad);
         }
     }
 }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ar.edu.unju.escmi.tp6.dominio.Cliente;
+import ar.edu.unju.escmi.tp6.exceptions.ClienteNoEncontradoException;
 
 public class CollectionCliente {
 
@@ -41,6 +42,9 @@ public class CollectionCliente {
 			return null;
 		}
         
+        if (clienteEncontrado == null) {
+            throw new ClienteNoEncontradoException("No existe un cliente con el DNI " + dni);
+        }
         return clienteEncontrado;
     }
 }
