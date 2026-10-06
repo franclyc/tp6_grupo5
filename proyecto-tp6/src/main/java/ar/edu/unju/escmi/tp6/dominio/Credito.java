@@ -48,13 +48,15 @@ public class Credito {
 		this.cuotas = cuotas;
 	}
 	
+public static final int CANTIDAD_CUOTAS = 20;
+
 	public void generarCuotas() {
-		double montoCuota = this.factura.calcularTotal() / 30;
+		double montoCuota = this.factura.calcularTotal() / CANTIDAD_CUOTAS;
 		int nroCuota = 0;
 		LocalDate currentDate = LocalDate.now();
 		LocalDate auxDate = LocalDate.now();
 
-		for (int i = 0; i < 30; i++) {
+		for (int i = 0; i < CANTIDAD_CUOTAS ; i++) {
 			nroCuota++;
 			Cuota cuota = new Cuota();
 			cuota.setMonto(montoCuota);
