@@ -5,6 +5,7 @@ import java.util.List;
 
 import ar.edu.unju.escmi.tp6.dominio.Producto;
 import ar.edu.unju.escmi.tp6.dominio.Stock;
+import ar.edu.unju.escmi.tp6.exceptions.StockInsuficienteException;
 
 public class CollectionStock {
 
@@ -71,6 +72,8 @@ public class CollectionStock {
 			if (stock.getCantidad() - cantidad >= 0) {
 				stock.setCantidad(stock.getCantidad() - cantidad);
 				stocks.set(i, stock);
+			} else {
+				throw new StockInsuficienteException("Stock insuficiente. Disponible: " + stock.getCantidad());
 			}
 		} else {
 			System.out.println("\nERROR");

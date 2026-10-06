@@ -1,31 +1,38 @@
 package ar.edu.unju.escmi.tp6.dominio;
 
-public class Stock {
-	 private int cantidad;
-	 private Producto producto;
+import ar.edu.unju.escmi.tp6.exceptions.StockInsuficienteException;
 
-	 public Stock() {
-     }
+public class Stock {
+     private int cantidad;
+     private Producto producto;
+
+     public Stock() {}
 
     public Stock(int cantidad, Producto producto) {
         this.cantidad = cantidad;
         this.producto = producto;
     }
 
-    public int getCantidad() {
-        return cantidad;
+    public int getCantidad() { return cantidad; }
+    public void setCantidad(int cantidad) { this.cantidad = cantidad; }
+    public Producto getProducto() { return producto; }
+    public void setProducto(Producto producto) { this.producto = producto; }
+
+    // Netodos agregados del diagrama
+    public boolean validarStockDisponible(int cantidadRequerida) {
+        return this.cantidad >= cantidadRequerida;
     }
 
-    public void setCantidad(int cantidad) {
-        this.cantidad = cantidad;
+    public void actualizarStock(int nuevaCantidad) {
+        this.cantidad = nuevaCantidad;
     }
 
-    public Producto getProducto() {
-        return producto;
-    }
-
-    public void setProducto(Producto producto) {
-        this.producto = producto;
+    public void decrementarStock(int cantidadVendida) {
+        if(validarStockDisponible(cantidadVendida)) {
+            this.cantidad -= cantidadVendida;
+        } else {
+            throw new StockInsuficienteException("Stock insuficiente. Disponible: " + this.cantidad);
+        }
     }
     
     public void decrementarStock(int cantidadADescontar) {
