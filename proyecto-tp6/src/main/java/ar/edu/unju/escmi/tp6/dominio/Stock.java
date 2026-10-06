@@ -27,4 +27,15 @@ public class Stock {
     public void setProducto(Producto producto) {
         this.producto = producto;
     }
+    
+    public void decrementarStock(int cantidadADescontar) {
+	if (cantidadADescontar <= 0) {
+		throw new IllegalArgumentException("La cantidad a descontar debe ser mayor a 0");
+	}
+	if (cantidadADescontar > this.cantidad) {
+		throw new IllegalArgumentException("Stock insuficiente");
+	}
+	this.cantidad -= cantidadADescontar;
+}
+
 }
