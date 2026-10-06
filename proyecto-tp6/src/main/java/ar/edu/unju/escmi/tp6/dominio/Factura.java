@@ -4,57 +4,39 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class Factura {
+    private LocalDate fecha;
 
-	private LocalDate fecha;
     private long nroFactura;
+
     private Cliente cliente;
+
     private List<Detalle> detalles = new ArrayList<Detalle>();
 
-    public Factura() {
-
-    }
+    public Factura() {}
 
     public Factura(LocalDate fecha, long nroFactura, Cliente cliente, List<Detalle> detalles) {
         this.fecha = fecha;
         this.nroFactura = nroFactura;
         this.cliente = cliente;
         this.detalles = detalles;
-        calcularTotal();
     }
 
-    public LocalDate getFecha() {
-        return fecha;
-    }
+    public LocalDate getFecha() { return fecha; }
 
-    public void setFecha(LocalDate fecha) {
-        this.fecha = fecha;
-    }
+    public void setFecha(LocalDate fecha) { this.fecha = fecha; }
 
-    public long getNroFactura() {
-        return nroFactura;
-    }
+    public long getNroFactura() { return nroFactura; }
 
-    public void setNroFactura(long nroFactura) {
-        this.nroFactura = nroFactura;
-    }
+    public void setNroFactura(long nroFactura) { this.nroFactura = nroFactura; }
 
-    public Cliente getCliente() {
-        return cliente;
-    }
+    public Cliente getCliente() { return cliente; }
 
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
-    }
+    public void setCliente(Cliente cliente) { this.cliente = cliente; }
 
-    public List<Detalle> getDetalles() {
-        return detalles;
-    }
+    public List<Detalle> getDetalles() { return detalles; }
 
-    public void setDetalles(List<Detalle> detalles) {
-        this.detalles = detalles;
-    }
+    public void setDetalles(List<Detalle> detalles) { this.detalles = detalles; }
 
     public double calcularTotal() {
         double total = 0;
@@ -62,6 +44,26 @@ public class Factura {
             total += detalle.getImporte();
         }
         return total;
+    }
+
+    // metodos agregados que estaban en el diagrama
+    public double calcularTotalAhora20() {
+        double total = 0;
+        for (Detalle detalle : detalles) {
+            if(detalle.isEstadoAhora20()){
+                total += detalle.getImporte();
+            }
+        }
+        return total;
+    }
+
+    public boolean esFacturaAhora20() {
+        for (Detalle detalle : detalles) {
+            if(detalle.isEstadoAhora20()){
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
