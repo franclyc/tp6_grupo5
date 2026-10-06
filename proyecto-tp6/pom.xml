@@ -6,10 +6,10 @@
   <name>proyecto-tp6</name>
   <description>desarrollo tp6</description>
   
-   <properties>
-	<maven.compiler.target>25</maven.compiler.target>
-	<maven.compiler.source>25</maven.compiler.source>
-	<encoding>UTF-8</encoding>
+<properties>
+    <maven.compiler.target>17</maven.compiler.target>
+    <maven.compiler.source>17</maven.compiler.source>
+    <encoding>UTF-8</encoding>
   </properties>
   
   <dependencies>
