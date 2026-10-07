@@ -56,6 +56,10 @@ public class TarjetaCredito {
 		this.limiteCompra = limiteCompra;
 	}
 
+	public double getLimiteCompra() {
+	return limiteCompra;
+}
+
 	
 	@Override
 	public String toString() {

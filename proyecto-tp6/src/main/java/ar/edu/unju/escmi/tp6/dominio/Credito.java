@@ -50,18 +50,29 @@ public class Credito {
 
     public Factura getFactura() { return factura; }
 
-    public void setFactura(Factura factura) { this.factura = factura; }
+	public List<Cuota> getCuotas() { return cuotas; }
 
-    public List<Cuota> getCuotas() { return cuotas; }
-    
-    public void setCuotas(List<Cuota> cuotas) { this.cuotas = cuotas; }
-    
-    public void generarCuotas() {
-        // Se cambió a 20 cuotas como exige el plan "Ahora 20"
-        double montoCuota = this.factura.calcularTotal() / 20; 
-        int nroCuota = 0;
-        LocalDate currentDate = LocalDate.now();
-        LocalDate auxDate = LocalDate.now();
+	public void setCuotas(List<Cuota> cuotas) { this.cuotas = cuotas; }
+
+	public static final int CANTIDAD_CUOTAS = 20;
+
+	public void generarCuotas() {
+		double montoCuota = this.factura.calcularTotal() / CANTIDAD_CUOTAS;
+		int nroCuota = 0;
+		LocalDate currentDate = LocalDate.now();
+		LocalDate auxDate = LocalDate.now();
+
+		for (int i = 0; i < CANTIDAD_CUOTAS; i++) {
+			nroCuota++;
+			Cuota cuota = new Cuota();
+			cuota.setMonto(montoCuota);
+			cuota.setNroCuota(nroCuota);
+			cuota.setFechaGeneracion(currentDate);
+			auxDate = auxDate.plusMonths(1);
+			cuota.setFechaVencimiento(auxDate);
+			cuotas.add(cuota);
+		}
+	}
 
         for (int i = 0; i < 20; i++) {
             nroCuota++;

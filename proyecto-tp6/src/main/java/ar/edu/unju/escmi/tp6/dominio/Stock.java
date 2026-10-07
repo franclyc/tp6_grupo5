@@ -34,4 +34,15 @@ public class Stock {
             throw new StockInsuficienteException("Stock insuficiente. Disponible: " + this.cantidad);
         }
     }
+    
+    public void decrementarStock(int cantidadADescontar) {
+	if (cantidadADescontar <= 0) {
+		throw new IllegalArgumentException("La cantidad a descontar debe ser mayor a 0");
+	}
+	if (cantidadADescontar > this.cantidad) {
+		throw new IllegalArgumentException("Stock insuficiente");
+	}
+	this.cantidad -= cantidadADescontar;
+}
+
 }
