@@ -28,21 +28,13 @@ public class Stock {
     }
 
     public void decrementarStock(int cantidadVendida) {
-        if(validarStockDisponible(cantidadVendida)) {
-            this.cantidad -= cantidadVendida;
-        } else {
+        if (cantidadVendida <= 0) {
+            throw new IllegalArgumentException("La cantidad a descontar debe ser mayor a 0");
+        }
+        if (!validarStockDisponible(cantidadVendida)) {
             throw new StockInsuficienteException("Stock insuficiente. Disponible: " + this.cantidad);
         }
+        this.cantidad -= cantidadVendida;
     }
-    
-    public void decrementarStock(int cantidadADescontar) {
-	if (cantidadADescontar <= 0) {
-		throw new IllegalArgumentException("La cantidad a descontar debe ser mayor a 0");
-	}
-	if (cantidadADescontar > this.cantidad) {
-		throw new IllegalArgumentException("Stock insuficiente");
-	}
-	this.cantidad -= cantidadADescontar;
-}
 
 }

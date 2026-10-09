@@ -12,7 +12,7 @@ class StockTest {
 	// el test se decrementa el stock de un producto en la cantidad indicada
 	@Test
 	void testDecrementarStock() {
-		Producto producto = new Producto(1L, "Yerba Mate 1kg", 3500, "Argentina");
+		Producto producto = new Producto(1L, "Yerba Mate 1kg", 3500, "Argentina", false);
 		Stock stock = new Stock(50, producto);
 		int cantidadADescontar = 10;
 

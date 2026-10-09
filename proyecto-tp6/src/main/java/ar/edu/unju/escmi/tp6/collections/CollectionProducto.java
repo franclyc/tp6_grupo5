@@ -15,10 +15,10 @@ public class CollectionProducto {
 	            productos.add(new Producto(1112, "Aire Acondicionado Split On/Off 3400W FC Hisense", 180000, "China"));
 	            productos.add(new Producto(1113, "Aire Acondicionado Split On/Off 3400W FC Philco", 180000, "Argentina"));
 	            productos.add(new Producto(1114, "Aire Acondicionado AA Inverter 3000 FC BGH", 250000, "Argentina"));
-	            productos.add(new Producto(2111, "Celular Galaxi A33 Samsung", 150000, "Argentina"));
-	            productos.add(new Producto(2112, "Celular L7 + Primer Black - RVA TCL", 110000, "Argentina"));
-	            productos.add(new Producto(2113, "Celular PANTALLA 5\" QUAD CORE 1RAM 32GB Alcatel", 90000, "Argentina"));
-	            productos.add(new Producto(2114, "Celular QTEST NEGRO Quantum", 75000, "Argentina"));
+	            productos.add(new Producto(2111, "Celular Galaxi A33 Samsung", 150000, "Argentina", true));
+	            productos.add(new Producto(2112, "Celular L7 + Primer Black - RVA TCL", 110000, "Argentina", true));
+	            productos.add(new Producto(2113, "Celular PANTALLA 5\" QUAD CORE 1RAM 32GB Alcatel", 90000, "Argentina", true));
+	            productos.add(new Producto(2114, "Celular QTEST NEGRO Quantum", 75000, "Argentina", true));
 	            productos.add(new Producto(3111, "Heladera Heladera con Freezer 317 lts blanca Columbia", 130000, "Argentina"));
 	            productos.add(new Producto(3112, "Heladera Heladera Ciclica Gafa", 160000, "Argentina"));
 	            productos.add(new Producto(3113, "Heladera Heladera No Frost Electrolux", 155000, "Argentina"));

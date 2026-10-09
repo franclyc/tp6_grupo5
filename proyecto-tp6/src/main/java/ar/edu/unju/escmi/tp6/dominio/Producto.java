@@ -9,6 +9,14 @@ public class Producto {
 
     public Producto() {}
 
+    public Producto(long codigo, String descripcion, double precioUnitario, String origenFabricacion) {
+        this(codigo, descripcion, precioUnitario, origenFabricacion, false);
+    }
+
+    public Producto(long codigo, String descripcion, int precioUnitario, String origenFabricacion) {
+        this(codigo, descripcion, (double) precioUnitario, origenFabricacion, false);
+    }
+
     public Producto(long codigo, String descripcion, double precioUnitario, String origenFabricacion, boolean esTelefono) {
         this.codigo = codigo;
         this.descripcion = descripcion;

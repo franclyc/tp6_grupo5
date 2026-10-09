@@ -74,18 +74,6 @@ public class Credito {
 		}
 	}
 
-        for (int i = 0; i < 20; i++) {
-            nroCuota++;
-            Cuota cuota = new Cuota();
-            cuota.setMonto(montoCuota);
-            cuota.setNroCuota(nroCuota);
-            cuota.setFechaGeneracion(currentDate); 
-            auxDate = auxDate.plusMonths(1);
-            cuota.setFechaVencimiento(auxDate);
-            cuotas.add(cuota);
-        }
-    }
-
     public void mostarCredito() {
         System.out.println("Tarjeta De Credito: " + tarjetaCredito + "\n" + factura + "\nCant. Cuotas:\n");
         for(Cuota cuota: cuotas) {
