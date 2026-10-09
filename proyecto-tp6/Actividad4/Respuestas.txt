@@ -1,0 +1,56 @@
+a). ¿Por qué no se dibuja la relación de agregación entre la clase CollectionProducto y Producto?
+
+En el diagrama no se representa la línea de agregación entre CollectionProducto y Producto porque la relación ya aparece indicada mediante el atributo productos : Producto[1..*] dentro de la clase. Por lo tanto, agregar otra línea sería representar dos veces la misma relación.
+
+Sin embargo, la relación sigue existiendo y corresponde a una agregación, ya que CollectionProducto agrupa varios objetos de tipo Producto.
+
+b). ¿Cuántos atributos tiene la clase Factura? ¿Cuáles son los nombres de esos atributos?
+
+La clase Factura tiene 4 atributos, que son los siguientes:
+
+1. nroFactura
+2. fecha
+4. cliente
+5. detalle
+
+c). ¿Cómo se llama la relación que se establece entre Factura y Detalle?
+
+La relación entre las clases Factura y Detalle se denomina composición. Esto significa que los detalles forman parte de una factura y dependen de ella para tener sentido dentro del sistema.
+
+d). ¿Cómo se llama la relación entre las clases Factura y Cliente?
+
+Entre las clases Factura y Cliente existe una relación de asociación. Su multiplicidad indica que cada factura pertenece a un único cliente, mientras que un cliente puede tener varias facturas asociadas.
+
+e). ¿Por qué los atributos de las clases Collections son públicos?
+
+Los atributos de las clases Collection son públicos para permitir que otras clases puedan acceder a ellos directamente. Estas clases se encargan principalmente de almacenar y administrar colecciones de objetos, facilitando su acceso y utilización dentro del programa.
+
+f). Describa las características de todos los métodos de la clase CollectionClientes.
+
+1. agregarCliente
+
+Este método permite incorporar un cliente nuevo a la colección, verificando que no exista otro registrado con el mismo DNI.
+
+* Es público.
+* Es estático.
+* No devuelve ningún valor (void).
+* Recibe como parámetro un objeto de tipo Cliente.
+* Comprueba que el objeto no sea null y evita agregar clientes con DNI duplicado.
+
+2. buscarCliente
+
+Este método busca dentro de la colección un cliente cuyo DNI coincida con el valor que se desea encontrar.
+
+* Es público.
+* Es estático.
+* Devuelve un objeto de tipo Cliente si encuentra una coincidencia; de lo contrario, retorna null.
+* Recibe como parámetro el DNI del cliente que se quiere buscar.
+
+3. precargarClientes
+
+Este método sirve para cargar previamente varios clientes en la colección, facilitando la inicialización y las pruebas del programa.
+
+* Es público.
+* Es estático.
+* No devuelve ningún valor (void).
+* No recibe parámetros.
