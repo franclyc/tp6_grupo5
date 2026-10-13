@@ -26,6 +26,7 @@ import ar.edu.unju.escmi.tp6.exceptions.StockInsuficienteException;
 public class Main {
 
 	private static final Scanner scanner = new Scanner(System.in);
+  private static final LocalDate FIN_PROGRAMA = LocalDate.of(2026, 12, 22);
 
 	public static void main(String[] args) {
 		CollectionCliente.precargarClientes();
@@ -117,6 +118,10 @@ public class Main {
 	}
 
 	private static void realizarVenta() {
+    if (LocalDate.now().isAfter(FIN_PROGRAMA)) {
+    System.out.println("El programa Ahora 20 finalizo el 22/12/2026. No se pueden realizar ventas.");
+    return;
+}
 		long dni = leerLong("Ingrese el DNI del cliente: ");
 		Cliente cliente = CollectionCliente.buscarCliente(dni);
 		List<TarjetaCredito> tarjetasCliente = new ArrayList<>();
