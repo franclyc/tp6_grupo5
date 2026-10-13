@@ -19,7 +19,7 @@ public class Credito {
         double total = factura.calcularTotal();
         double totalTelefonos = 0;
         for (Detalle detalle : factura.getDetalles()) {
-            if (detalle.getProducto().isEsTelefono()) {
+            if (detalle.getProducto() != null && detalle.getProducto().isEsTelefono()) {
                 totalTelefonos += detalle.getImporte();
             }
         }
