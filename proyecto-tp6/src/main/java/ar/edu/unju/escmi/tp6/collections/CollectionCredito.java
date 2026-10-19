@@ -9,13 +9,19 @@ public class CollectionCredito {
 
 	 public static List<Credito> creditos = new ArrayList<Credito>();
 
-	 public static void agregarCredito(Credito credito) {
-	        
-	    	try {
-	    		creditos.add(credito);
-			} catch (Exception e) {
-				System.out.println("\nNO SE PUEDE GUARDAR EL CREDITO");
-			}
-	    	
-	    }
+	 public static boolean agregarCredito(Credito credito) {
+
+		if (credito == null) {
+			System.out.println("\nNO SE PUEDE GUARDAR EL CREDITO: el credito es nulo.");
+			return false;
+		}
+
+		if (creditos.contains(credito)) {
+			System.out.println("\nNO SE PUEDE GUARDAR EL CREDITO: ya existe en la lista.");
+			return false;
+		}
+
+		creditos.add(credito);
+		return true;
+	}
 }

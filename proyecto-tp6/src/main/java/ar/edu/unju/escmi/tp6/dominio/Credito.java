@@ -3,6 +3,7 @@ package ar.edu.unju.escmi.tp6.dominio;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import ar.edu.unju.escmi.tp6.exceptions.LimiteTarjetaInsuficienteException;
 import ar.edu.unju.escmi.tp6.exceptions.MontoExcedidoException;
@@ -80,4 +81,20 @@ public class Credito {
             System.out.println(cuota);
         }
     }
+
+    @Override
+    public boolean equals(Object obj) {
+	if (this == obj) return true;
+	if (obj == null || getClass() != obj.getClass()) return false;
+	Credito otro = (Credito) obj;
+	if (this.factura == null || otro.factura == null) return false;
+	return this.factura.getNroFactura() == otro.factura.getNroFactura();
+    }
+
+    @Override
+    public int hashCode() {
+	return factura == null ? 0 : Long.hashCode(factura.getNroFactura());
+    }
+    
+    
 }

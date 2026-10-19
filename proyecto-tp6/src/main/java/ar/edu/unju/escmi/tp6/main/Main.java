@@ -197,11 +197,15 @@ public class Main {
 		Factura factura = new Factura(LocalDate.now(), numeroFactura, cliente, detalles);
 		Credito credito = new Credito(tarjetaSeleccionada, factura, new ArrayList<>());
 
+		if (!CollectionCredito.agregarCredito(credito)) {
+		System.out.println("No se pudo completar la venta.");
+		return;
+		}
+
 		for (int i = 0; i < stocksVendidos.size(); i++) {
-			CollectionStock.reducirStock(stocksVendidos.get(i), cantidadesVendidas.get(i));
+		CollectionStock.reducirStock(stocksVendidos.get(i), cantidadesVendidas.get(i));
 		}
 		CollectionFactura.agregarFactura(factura);
-		CollectionCredito.agregarCredito(credito);
 		tarjetaSeleccionada.setLimiteCompra(tarjetaSeleccionada.getLimiteCompra() - factura.calcularTotal());
 
 		System.out.println("Venta realizada correctamente. Compra financiada en 20 cuotas.");

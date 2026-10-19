@@ -21,30 +21,25 @@ public class CollectionCliente {
 
 
     public static void agregarCliente(Cliente cliente) {
-    	try {
-    		clientes.add(cliente);
-		} catch (Exception e) {
-			System.out.println("\nNO SE PUEDE GUARDAR EL CLIENTE");
+    	if (cliente == null) {
+			throw new IllegalArgumentException("No se puede guardar un cliente null");
 		}
+		for (Cliente cli : clientes) {
+			if (cli.getDni() == cliente.getDni()) {
+				throw new IllegalArgumentException("Ya existe un cliente con el DNI " + cliente.getDni());
+			}
+		}
+		clientes.add(cliente);
         
     }
 
     public static Cliente buscarCliente(long dni) {
-        Cliente clienteEncontrado = null;
-
-        try {
-        	for (Cliente cli : clientes) {
-                if (cli.getDni() == dni) {
-                    clienteEncontrado = cli;
-                }
-            }
-		} catch (Exception e) {
-			return null;
+		for (Cliente cli : clientes) {
+			if (cli.getDni() == dni) {
+				return cli;
+			}
 		}
-        
-        if (clienteEncontrado == null) {
-            throw new ClienteNoEncontradoException("No existe un cliente con el DNI " + dni);
-        }
-        return clienteEncontrado;
-    }
+		throw new ClienteNoEncontradoException("No existe un cliente con el DNI " + dni);
+	}
+
 }
