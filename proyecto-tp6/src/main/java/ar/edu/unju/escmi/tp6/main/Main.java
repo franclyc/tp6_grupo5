@@ -64,7 +64,14 @@ public class Main {
 			} catch (ClienteNoEncontradoException | StockInsuficienteException | MontoExcedidoException
 					| LimiteTarjetaInsuficienteException e) {
 				System.out.println("\n" + e.getMessage());
+			} catch (Exception e) {
+				System.out.println("\nOcurrio un error inesperado: " + e.getMessage());
+			} finally {
+				if (opcion != 6) {
+				System.out.println("\n--- Fin de la operacion ---");
 			}
+		    }
+			
 		} while (opcion != 6);
 		scanner.close();
 	}
