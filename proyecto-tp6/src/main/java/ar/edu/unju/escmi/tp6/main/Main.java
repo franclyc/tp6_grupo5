@@ -167,8 +167,15 @@ public class Main {
 				System.out.println("La cantidad debe ser mayor que cero.");
 				continue;
 			}
-			if (!stock.validarStockDisponible(cantidad)) {
-				System.out.println("Stock insuficiente. Disponible: " + stock.getCantidad());
+			
+			int cantidadReservada = 0;
+			for (int i = 0; i < stocksVendidos.size(); i++) {
+				if (stocksVendidos.get(i) == stock) {
+					cantidadReservada += cantidadesVendidas.get(i);
+				}
+			}
+			if (!stock.validarStockDisponible(cantidadReservada + cantidad)) {
+				System.out.println("Stock insuficiente. Disponible: " + (stock.getCantidad() - cantidadReservada));
 				continue;
 			}
 

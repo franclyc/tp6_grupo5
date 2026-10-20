@@ -12,30 +12,21 @@ public class CollectionFactura {
 	
 
 	public static void agregarFactura(Factura factura) {
-		
-		try {
-			facturas.add(factura);
-		} catch (Exception e) {
-			System.out.println("\nNO SE PUEDE GUARDAR LA FACTURA");
+		if (factura == null) {
+			throw new IllegalArgumentException("No se puede guardar una factura null");
 		}
-		
+		if (buscarFactura(factura.getNroFactura()) != null) {
+			throw new IllegalArgumentException("Ya existe una factura con el numero " + factura.getNroFactura());
+		}
+		facturas.add(factura);
 	}
 
 	public static Factura buscarFactura(long nroFactura) {
-		Factura facturaEncontrada = null;
-		
-		try {
-			if (facturas != null) {
-				for (Factura fac : facturas) {
-					if (fac.getNroFactura() == nroFactura) {
-						facturaEncontrada = fac;
-					}
-				}
+		for (Factura fac : facturas) {
+			if (fac.getNroFactura() == nroFactura) {
+				return fac;
 			}
-		} catch (Exception e) {
-			return null;
 		}
-		
-		return facturaEncontrada;
+		return null;
 	}
 }

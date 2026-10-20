@@ -36,48 +36,25 @@ public class CollectionProducto {
 	    }
 
 	   public static void agregarProducto(Producto producto) {
-	        
-	    	try {
-	    		if (productos.isEmpty()) {
-	                productos.add(producto);
-	            } else {
-	                long controlCodigo = producto.getCodigo();
-	                boolean band = true;
-
-	                for (Producto pro : productos) {
-	                    if (band) {
-	                        if (pro.getCodigo() == controlCodigo) {
-	                            System.out.println("\nYa existe un producto con ese código");
-	                            band = false;
-	                        }
-	                    }
-	                }
-	                if (band) {
-	                    productos.add(producto);
-	                }
-
-	            }
-			} catch (Exception e) {
-				System.out.println("\nNO SE PUEDE GUARDAR EL PRODUCTO");
+		if (producto == null) {
+			throw new IllegalArgumentException("No se puede guardar un producto null");
+		}
+		for (Producto pro : productos) {
+			if (pro.getCodigo() == producto.getCodigo()) {
+				throw new IllegalArgumentException("Ya existe un producto con el codigo " + producto.getCodigo());
 			}
-	    	
-	    }
+		}
+		productos.add(producto);
+	}
 
 	    public static Producto buscarProducto(long codigo) {
-	        Producto productoEncontrado = null;
-	        
-	        try {
-	        	if (!productos.isEmpty()) {
-	                for (Producto pro : productos) {
-	                    if (pro.getCodigo() == codigo) {
-	                        productoEncontrado = pro;
-	                    }
-	                }
-	            }
-			} catch (Exception e) {
-				return null;
+
+		for (Producto pro : productos) {
+			if (pro.getCodigo() == codigo) {
+				return pro;
 			}
-	        
-	        return productoEncontrado;
-	    }
+		}
+
+		return null;
+	}
 }
