@@ -5,7 +5,6 @@ import java.util.List;
 
 import ar.edu.unju.escmi.tp6.dominio.Producto;
 import ar.edu.unju.escmi.tp6.dominio.Stock;
-import ar.edu.unju.escmi.tp6.exceptions.StockInsuficienteException;
 
 public class CollectionStock {
 
@@ -50,18 +49,11 @@ public class CollectionStock {
 		stocks.add(stock);
 	}
 
-	public static void reducirStock(Stock stock, int cantidad) {
-		int i = stocks.indexOf(stock);
-		if (i >= 0) {
-			if (stock.getCantidad() - cantidad >= 0) {
-				stock.setCantidad(stock.getCantidad() - cantidad);
-				stocks.set(i, stock);
-			} else {
-				throw new StockInsuficienteException("Stock insuficiente. Disponible: " + stock.getCantidad());
-			}
-		} else {
-			System.out.println("\nERROR");
+		public static void reducirStock(Stock stock, int cantidad) {
+		if (stock == null || !stocks.contains(stock)) {
+			throw new IllegalArgumentException("El stock indicado no esta registrado");
 		}
+		stock.decrementarStock(cantidad);
 	}
 
 	public static Stock buscarStock(Producto producto) {

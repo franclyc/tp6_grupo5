@@ -211,10 +211,7 @@ public class Main {
 		Factura factura = new Factura(LocalDate.now(), numeroFactura, cliente, detalles);
 		Credito credito = new Credito(tarjetaSeleccionada, factura, new ArrayList<>());
 
-		if (!CollectionCredito.agregarCredito(credito)) {
-		System.out.println("No se pudo completar la venta.");
-		return;
-		}
+		CollectionCredito.agregarCredito(credito);
 
 		for (int i = 0; i < stocksVendidos.size(); i++) {
 		CollectionStock.reducirStock(stocksVendidos.get(i), cantidadesVendidas.get(i));
