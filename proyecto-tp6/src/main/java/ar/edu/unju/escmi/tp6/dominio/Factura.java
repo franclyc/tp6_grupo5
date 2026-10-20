@@ -5,73 +5,97 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Factura {
-    private LocalDate fecha;
 
-    private long nroFactura;
+	private LocalDate fecha;
+	private long nroFactura;
+	private Cliente cliente;
+	private List<Detalle> detalles = new ArrayList<Detalle>();
 
-    private Cliente cliente;
+	public Factura() {
 
-    private List<Detalle> detalles = new ArrayList<Detalle>();
+	}
 
-    public Factura() {}
+	public Factura(LocalDate fecha, long nroFactura, Cliente cliente) {
+		this.fecha = fecha;
+		this.nroFactura = nroFactura;
+		this.cliente = cliente;
+	}
 
-    public Factura(LocalDate fecha, long nroFactura, Cliente cliente, List<Detalle> detalles) {
-        this.fecha = fecha;
-        this.nroFactura = nroFactura;
-        this.cliente = cliente;
-        this.detalles = detalles;
-    }
+	public LocalDate getFecha() {
+		return fecha;
+	}
 
-    public LocalDate getFecha() { return fecha; }
+	public void setFecha(LocalDate fecha) {
+		this.fecha = fecha;
+	}
 
-    public void setFecha(LocalDate fecha) { this.fecha = fecha; }
+	public long getNroFactura() {
+		return nroFactura;
+	}
 
-    public long getNroFactura() { return nroFactura; }
+	public void setNroFactura(long nroFactura) {
+		this.nroFactura = nroFactura;
+	}
 
-    public void setNroFactura(long nroFactura) { this.nroFactura = nroFactura; }
+	public Cliente getCliente() {
+		return cliente;
+	}
 
-    public Cliente getCliente() { return cliente; }
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
+	}
 
-    public void setCliente(Cliente cliente) { this.cliente = cliente; }
+	public List<Detalle> getDetalles() {
+		return detalles;
+	}
 
-    public List<Detalle> getDetalles() { return detalles; }
+	public void setDetalles(List<Detalle> detalles) {
+		this.detalles = detalles;
+	}
 
-    public void setDetalles(List<Detalle> detalles) { this.detalles = detalles; }
+	/**
+	 * Composicion: la factura es la responsable de crear sus detalles.
+	 */
+	public void agregarDetalle(int cantidad, Producto producto) {
+		detalles.add(new Detalle(cantidad, producto));
+	}
 
-    public double calcularTotal() {
-        double total = 0;
-        for (Detalle detalle : detalles) {
-            total += detalle.getImporte();
-        }
-        return total;
-    }
+	public double calcularTotal() {
+		double total = 0;
+		for (Detalle detalle : detalles) {
+			total += detalle.getImporte();
+		}
+		return total;
+	}
 
-    // metodos agregados que estaban en el diagrama
-    public double calcularTotalAhora20() {
-        double total = 0;
-        for (Detalle detalle : detalles) {
-            if(detalle.isEstadoAhora20()){
-                total += detalle.getImporte();
-            }
-        }
-        return total;
-    }
+	public double calcularTotalAhora20() {
+		double total = 0;
+		for (Detalle detalle : detalles) {
+			if (detalle.isEstadoAhora20()) {
+				total += detalle.getImporte();
+			}
+		}
+		return total;
+	}
 
-    public boolean esFacturaAhora20() {
-        for (Detalle detalle : detalles) {
-            if(detalle.isEstadoAhora20()){
-                return true;
-            }
-        }
-        return false;
-    }
+	public boolean esFacturaAhora20() {
+		for (Detalle detalle : detalles) {
+			if (!detalle.isEstadoAhora20()) {
+				return false;
+			}
+		}
+		return !detalles.isEmpty();
+	}
 
-    @Override
-    public String toString() {
-        return  "\n\n******************** Factura ********************"
-                + "\nFecha: " + fecha + " N° de Factura: " + nroFactura
-                + "\nCliente: " + cliente.getNombre() 
-                + "\n************ Detalles de la Factura *************"
-                + "\n" + detalles.toString().replaceAll("\\[|\\]", "").replaceAll(", ", "") + "\n";
-    }
+	@Override
+	public String toString() {
+		String texto = "\n\n******************** Factura ********************"
+				+ "\nFecha: " + fecha + " N° de Factura: " + nroFactura
+				+ "\nCliente: " + cliente.getNombre()
+				+ "\n************ Detalles de la Factura *************\n";
+		for (Detalle detalle : detalles) {
+			texto += detalle.toString();
+		}
+		return texto;
+	}
 }

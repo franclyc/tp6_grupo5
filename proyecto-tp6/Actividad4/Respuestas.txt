@@ -1,56 +1,59 @@
 a). ¿Por qué no se dibuja la relación de agregación entre la clase CollectionProducto y Producto?
 
-En el diagrama no se representa la línea de agregación entre CollectionProducto y Producto porque la relación ya aparece indicada mediante el atributo productos : Producto[1..*] dentro de la clase. Por lo tanto, agregar otra línea sería representar dos veces la misma relación.
+En el diagrama no se dibuja la línea de agregación entre CollectionProducto y Producto porque la relación ya está representada mediante el atributo "+ productos : Producto[1..*]" dentro de la clase CollectionProducto. En UML un atributo puede indicar su tipo y su multiplicidad ([visibilidad] nombre : tipo [multiplicidad]), por lo que dibujar además la línea sería representar dos veces la misma relación.
 
-Sin embargo, la relación sigue existiendo y corresponde a una agregación, ya que CollectionProducto agrupa varios objetos de tipo Producto.
+Sin embargo, la relación sigue existiendo y corresponde a una agregación, ya que CollectionProducto "tiene" varios objetos de tipo Producto y los productos pueden existir sin la colección.
 
 b). ¿Cuántos atributos tiene la clase Factura? ¿Cuáles son los nombres de esos atributos?
 
-La clase Factura tiene 4 atributos, que son los siguientes:
+La clase Factura tiene 4 atributos:
 
-1. nroFactura
-2. fecha
-4. cliente
-5. detalle
+1. fecha (LocalDate)
+2. nroFactura (long)
+3. cliente (Cliente): se muestra como el rol "- cliente" de la asociación con Cliente.
+4. detalles (List<Detalle>): se muestra como el rol "- detalles" de la composición con Detalle.
+
+En la caja de la clase solo aparecen fecha y nroFactura; los otros dos se representan con las relaciones.
 
 c). ¿Cómo se llama la relación que se establece entre Factura y Detalle?
 
-La relación entre las clases Factura y Detalle se denomina composición. Esto significa que los detalles forman parte de una factura y dependen de ella para tener sentido dentro del sistema.
+Es una relación de composición (rombo relleno). Una factura "contiene" uno o más detalles (multiplicidad 1..*) y un detalle no puede existir sin su factura. Por eso la Factura es la responsable de crear sus detalles (método agregarDetalle).
 
 d). ¿Cómo se llama la relación entre las clases Factura y Cliente?
 
-Entre las clases Factura y Cliente existe una relación de asociación. Su multiplicidad indica que cada factura pertenece a un único cliente, mientras que un cliente puede tener varias facturas asociadas.
+Es una relación de asociación unidireccional (navegable desde Factura hacia Cliente). La Factura guarda una referencia al cliente en el atributo privado "cliente" (rol "- cliente"), con multiplicidad 1: cada factura pertenece a un único cliente. El Cliente no guarda sus facturas como atributo; para obtenerlas usa el método consultarCompras(), que las busca en CollectionFactura.
 
 e). ¿Por qué los atributos de las clases Collections son públicos?
 
-Los atributos de las clases Collection son públicos para permitir que otras clases puedan acceder a ellos directamente. Estas clases se encargan principalmente de almacenar y administrar colecciones de objetos, facilitando su acceso y utilización dentro del programa.
+Porque son atributos públicos y estáticos (por eso aparecen subrayados en el diagrama). Las clases Collection funcionan como una "base de datos en memoria": cada lista existe una sola vez para todo el programa y es compartida por todas las clases. Al ser public static se pueden usar desde cualquier clase sin crear un objeto de la colección, por ejemplo CollectionProducto.productos o CollectionFactura.facturas.
 
 f). Describa las características de todos los métodos de la clase CollectionClientes.
 
-1. agregarCliente
+1. precargarClientes()
 
-Este método permite incorporar un cliente nuevo a la colección, verificando que no exista otro registrado con el mismo DNI.
+Carga tres clientes de prueba en la lista, solo si la lista está vacía (así no se duplican si se llama más de una vez).
+
+* Es público.
+* Es estático (subrayado en el diagrama).
+* No devuelve ningún valor (void).
+* No recibe parámetros.
+
+2. agregarCliente(in cliente: Cliente)
+
+Agrega un cliente nuevo a la colección.
 
 * Es público.
 * Es estático.
 * No devuelve ningún valor (void).
 * Recibe como parámetro un objeto de tipo Cliente.
-* Comprueba que el objeto no sea null y evita agregar clientes con DNI duplicado.
+* Si el cliente es null o si ya existe otro cliente con el mismo DNI, lanza una IllegalArgumentException (excepción no chequeada) y no lo agrega.
 
-2. buscarCliente
+3. buscarCliente(in dni: long): Cliente
 
-Este método busca dentro de la colección un cliente cuyo DNI coincida con el valor que se desea encontrar.
-
-* Es público.
-* Es estático.
-* Devuelve un objeto de tipo Cliente si encuentra una coincidencia; de lo contrario, retorna null.
-* Recibe como parámetro el DNI del cliente que se quiere buscar.
-
-3. precargarClientes
-
-Este método sirve para cargar previamente varios clientes en la colección, facilitando la inicialización y las pruebas del programa.
+Busca en la colección el cliente cuyo DNI coincide con el recibido.
 
 * Es público.
 * Es estático.
-* No devuelve ningún valor (void).
-* No recibe parámetros.
+* Recibe como parámetro el DNI (long) del cliente buscado.
+* Devuelve el objeto Cliente encontrado.
+* Si no existe ningún cliente con ese DNI lanza ClienteNoEncontradoException. Es una excepción chequeada (extiende de Exception), por eso el método la declara con "throws ClienteNoEncontradoException" y quien lo llama está obligado a capturarla con try-catch o a propagarla.

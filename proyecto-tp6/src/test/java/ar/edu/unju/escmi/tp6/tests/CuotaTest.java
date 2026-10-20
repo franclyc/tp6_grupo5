@@ -3,58 +3,46 @@ package ar.edu.unju.escmi.tp6.tests;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import ar.edu.unju.escmi.tp6.dominio.Cliente;
 import ar.edu.unju.escmi.tp6.dominio.Credito;
-import ar.edu.unju.escmi.tp6.dominio.Cuota;
-import ar.edu.unju.escmi.tp6.dominio.Detalle;
 import ar.edu.unju.escmi.tp6.dominio.Factura;
+import ar.edu.unju.escmi.tp6.dominio.Producto;
 import ar.edu.unju.escmi.tp6.dominio.TarjetaCredito;
 
 class CuotaTest {
 
 	public static final int CANTIDAD_CUOTAS_PERMITIDAS = 20;
 
-	//1: la lista de cuotas no es null
+	private Credito credito;
+
+	@BeforeEach
+	void setUp() {
+		Cliente cliente = new Cliente(12345678L, "Juan Perez", "Calle Falsa 123", "388123456");
+		TarjetaCredito tarjeta = new TarjetaCredito(1111222233334444L, LocalDate.now().plusYears(2), cliente,
+				3000000);
+		Factura factura = new Factura(LocalDate.now(), 1, cliente);
+		factura.agregarDetalle(1, new Producto(4111, "Lavarropas Semi 7 Kgs Columbia", 210000, "Argentina"));
+		credito = new Credito(tarjeta, factura);
+	}
+
 	@Test
 	void testListaCuotasNoNull() {
-		Credito credito = crearCredito();
-		assertNotNull(credito.getCuotas(), "La lista de cuotas no debería ser null");
+		assertNotNull(credito.getCuotas(), "La lista de cuotas no deberia ser null");
 	}
 
-	//  2: la lista de cuotas siempre tiene 20 cuotas
 	@Test
 	void testListaTiene20Cuotas() {
-		Credito credito = crearCredito();
 		assertEquals(CANTIDAD_CUOTAS_PERMITIDAS, credito.getCuotas().size(),
-				"La lista debería tener exactamente 20 cuotas");
+				"La lista deberia tener exactamente 20 cuotas");
 	}
 
-	//  3: la cantidad de cuotas generadas no supera la cantidad permitida
 	@Test
 	void testCuotasGeneradasNoSuperanPermitidas() {
-		Credito credito = crearCredito();
 		assertTrue(credito.getCuotas().size() <= CANTIDAD_CUOTAS_PERMITIDAS,
-				"La cantidad de cuotas generadas no debería superar las permitidas");
-	}
-
-	private Credito crearCredito() {
-		Cliente cliente = new Cliente(12345678L, "Juan Perez", "Calle Falsa 123", "388123456");
-		TarjetaCredito tarjeta = new TarjetaCredito(1111222233334444L, LocalDate.now().plusYears(2), cliente, 3000000);
-		return new Credito(tarjeta, crearFactura(), new ArrayList<Cuota>());
-	}
-
-	private Factura crearFactura() {
-		Factura factura = new Factura();
-		List<Detalle> detalles = new ArrayList<Detalle>();
-		Detalle detalle = new Detalle();
-		detalle.setImporte(1000000);
-		detalles.add(detalle);
-		factura.setDetalles(detalles);
-		return factura;
+				"La cantidad de cuotas generadas no deberia superar las permitidas");
 	}
 }

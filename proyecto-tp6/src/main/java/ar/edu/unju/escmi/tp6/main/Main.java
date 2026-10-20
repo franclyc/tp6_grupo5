@@ -1,7 +1,6 @@
 package ar.edu.unju.escmi.tp6.main;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -22,79 +21,86 @@ import ar.edu.unju.escmi.tp6.exceptions.ClienteNoEncontradoException;
 import ar.edu.unju.escmi.tp6.exceptions.LimiteTarjetaInsuficienteException;
 import ar.edu.unju.escmi.tp6.exceptions.MontoExcedidoException;
 import ar.edu.unju.escmi.tp6.exceptions.StockInsuficienteException;
+import ar.edu.unju.escmi.tp6.exceptions.TarjetaVencidaException;
 
 public class Main {
 
 	private static final Scanner scanner = new Scanner(System.in);
-  private static final LocalDate FIN_PROGRAMA = LocalDate.of(2026, 12, 22);
+	private static final LocalDate FIN_PROGRAMA = LocalDate.of(2026, 12, 22);
 
 	public static void main(String[] args) {
+		// Los clientes se precargan antes que las tarjetas porque cada tarjeta busca a su cliente
 		CollectionCliente.precargarClientes();
 		CollectionTarjetaCredito.precargarTarjetas();
 		CollectionProducto.precargarProductos();
 		CollectionStock.precargarStocks();
 
-		int opcion;
-		do {
-			mostrarMenu();
-			opcion = leerOpcion();
-			try {
-				switch (opcion) {
-				case 1:
-					realizarVenta();
-					break;
-				case 2:
-					consultarCompras();
-					break;
-				case 3:
-					mostrarProductos();
-					break;
-				case 4:
-					consultarStock();
-					break;
-				case 5:
-					consultarCreditos();
-					break;
-				case 6:
-					System.out.println("Hasta luego.");
-					break;
-				default:
-					System.out.println("Opcion invalida. Ingrese un numero del 1 al 6.");
+		int opcion = 0;
+		try {
+			do {
+				mostrarMenu();
+				opcion = leerOpcion();
+				try {
+					switch (opcion) {
+					case 1:
+						realizarVenta();
+						break;
+					case 2:
+						consultarCompras();
+						break;
+					case 3:
+						mostrarProductosAhora20();
+						break;
+					case 4:
+						consultarStock();
+						break;
+					case 5:
+						consultarCreditos();
+						break;
+					case 6:
+						System.out.println("Hasta luego.");
+						break;
+					default:
+						System.out.println("Opcion invalida. Ingrese un numero del 1 al 6.");
+					}
+				} catch (ClienteNoEncontradoException e) {
+					System.out.println("\n" + e.getMessage());
+				} catch (StockInsuficienteException e) {
+					System.out.println("\nNo se pudo completar la venta: " + e.getMessage());
+				} catch (MontoExcedidoException e) {
+					System.out.println("\nNo se pudo completar la venta: " + e.getMessage());
+				} catch (LimiteTarjetaInsuficienteException e) {
+					System.out.println("\nNo se pudo completar la venta: " + e.getMessage());
+				} catch (TarjetaVencidaException e) {
+					System.out.println("\nNo se pudo completar la venta: " + e.getMessage());
+				} catch (IllegalArgumentException e) {
+					System.out.println("\nDatos invalidos: " + e.getMessage());
+				} catch (Exception e) {
+					System.out.println("\nOcurrio un error inesperado: " + e.getMessage());
+				} finally {
+					if (opcion != 6) {
+						System.out.println("\n--- Fin de la operacion ---");
+					}
 				}
-			} catch (ClienteNoEncontradoException | StockInsuficienteException | MontoExcedidoException
-					| LimiteTarjetaInsuficienteException e) {
-				System.out.println("\n" + e.getMessage());
-			} catch (Exception e) {
-				System.out.println("\nOcurrio un error inesperado: " + e.getMessage());
-			} finally {
-				if (opcion != 6) {
-				System.out.println("\n--- Fin de la operacion ---");
-			}
-		    }
-			
-		} while (opcion != 6);
-		scanner.close();
+			} while (opcion != 6);
+		} finally {
+			// try-finally: el Scanner se cierra siempre, ocurra o no una excepcion
+			scanner.close();
+		}
 	}
 
 	private static void mostrarMenu() {
-		System.out.println("\n====== Menu Principal =====");
-		System.out.println("1- Realizar una venta");
-		System.out.println("2- Revisar compras realizadas por el cliente (debe ingresar el DNI del cliente)");
-		System.out.println("3- Mostrar lista de los electrodomesticos");
-		System.out.println("4- Consultar stock");
+		System.out.println("\n====== Menu Principal - Programa Ahora 20 =====");
+		System.out.println("1- Realizar una venta con el programa Ahora 20");
+		System.out.println("2- Ver compras realizadas por el cliente (debe ingresar el DNI del cliente)");
+		System.out.println("3- Lista de electrodomesticos que se pueden comprar con Ahora 20");
+		System.out.println("4- Consultar stock de los electrodomesticos incluidos en el programa");
 		System.out.println("5- Revisar creditos de un cliente (debe ingresar el DNI del cliente)");
 		System.out.println("6- Salir");
 	}
 
 	private static int leerOpcion() {
-		while (true) {
-			String entrada = leerTexto("Ingrese su opcion: ");
-			try {
-				return Integer.parseInt(entrada);
-			} catch (NumberFormatException e) {
-				System.out.println("Debe ingresar un numero valido.");
-			}
-		}
+		return leerEntero("Ingrese su opcion: ");
 	}
 
 	private static long leerLong(String mensaje) {
@@ -124,28 +130,24 @@ public class Main {
 		return scanner.nextLine().trim();
 	}
 
-	private static void realizarVenta() {
-    if (LocalDate.now().isAfter(FIN_PROGRAMA)) {
-    System.out.println("El programa Ahora 20 finalizo el 22/12/2026. No se pueden realizar ventas.");
-    return;
-}
+	private static void realizarVenta() throws ClienteNoEncontradoException {
+		if (LocalDate.now().isAfter(FIN_PROGRAMA)) {
+			System.out.println("El programa Ahora 20 finalizo el 22/12/2026. No se pueden realizar ventas.");
+			return;
+		}
+
 		long dni = leerLong("Ingrese el DNI del cliente: ");
 		Cliente cliente = CollectionCliente.buscarCliente(dni);
-		List<TarjetaCredito> tarjetasCliente = new ArrayList<>();
-		for (TarjetaCredito tarjeta : CollectionTarjetaCredito.tarjetas) {
-			if (tarjeta.getCliente().getDni() == cliente.getDni()) {
-				tarjetasCliente.add(tarjeta);
-			}
-		}
+		List<TarjetaCredito> tarjetasCliente = CollectionTarjetaCredito.buscarTarjetasCliente(dni);
 		if (tarjetasCliente.isEmpty()) {
 			System.out.println("El cliente no tiene una tarjeta de credito registrada.");
 			return;
 		}
 
-		mostrarProductos();
-		List<Detalle> detalles = new ArrayList<>();
-		List<Stock> stocksVendidos = new ArrayList<>();
-		List<Integer> cantidadesVendidas = new ArrayList<>();
+		mostrarProductosAhora20();
+		long numeroFactura = CollectionFactura.facturas.size() + 1L;
+		Factura factura = new Factura(LocalDate.now(), numeroFactura, cliente);
+
 		while (true) {
 			long codigo = leerLong("Ingrese el codigo del producto (0 para finalizar): ");
 			if (codigo == 0) {
@@ -156,7 +158,10 @@ public class Main {
 				System.out.println("No existe un producto con ese codigo.");
 				continue;
 			}
-
+			if (!producto.esFabricacionNacional()) {
+				System.out.println("El producto no es de fabricacion nacional, no esta incluido en Ahora 20.");
+				continue;
+			}
 			Stock stock = CollectionStock.buscarStock(producto);
 			if (stock == null) {
 				System.out.println("El producto no tiene stock registrado.");
@@ -167,39 +172,30 @@ public class Main {
 				System.out.println("La cantidad debe ser mayor que cero.");
 				continue;
 			}
-			
-			int cantidadReservada = 0;
-			for (int i = 0; i < stocksVendidos.size(); i++) {
-				if (stocksVendidos.get(i) == stock) {
-					cantidadReservada += cantidadesVendidas.get(i);
-				}
-			}
-			if (!stock.validarStockDisponible(cantidadReservada + cantidad)) {
-				System.out.println("Stock insuficiente. Disponible: " + (stock.getCantidad() - cantidadReservada));
+			// Se suma lo que ya se cargo del mismo producto para no vender mas de lo que hay
+			int cantidadYaCargada = calcularCantidadCargada(factura, producto);
+			if (!stock.validarStockDisponible(cantidadYaCargada + cantidad)) {
+				System.out.println("Stock insuficiente. Disponible: " + (stock.getCantidad() - cantidadYaCargada));
 				continue;
 			}
-
-			detalles.add(new Detalle(cantidad, producto, true));
-			stocksVendidos.add(stock);
-			cantidadesVendidas.add(cantidad);
+			factura.agregarDetalle(cantidad, producto);
 		}
 
-		if (detalles.isEmpty()) {
+		if (factura.getDetalles().isEmpty()) {
 			System.out.println("No se agregaron productos; la venta fue cancelada.");
 			return;
 		}
 
-		System.out.println("Tarjetas disponibles para " + cliente.getNombre() + ":");
+		System.out.println("Tarjetas de " + cliente.getNombre() + ":");
 		for (TarjetaCredito tarjeta : tarjetasCliente) {
-			System.out.println("Numero: " + tarjeta.getNumero() + " | Limite disponible: "
-					+ tarjeta.getLimiteCompra());
+			System.out.println("Numero: " + tarjeta.getNumero() + " | Limite disponible: " + tarjeta.getLimiteCompra()
+					+ " | Vence: " + tarjeta.getFechaCaducacion() + (tarjeta.estaVigente() ? "" : " (VENCIDA)"));
 		}
 		long numeroTarjeta = leerLong("Ingrese el numero de la tarjeta: ");
 		TarjetaCredito tarjetaSeleccionada = null;
 		for (TarjetaCredito tarjeta : tarjetasCliente) {
 			if (tarjeta.getNumero() == numeroTarjeta) {
 				tarjetaSeleccionada = tarjeta;
-				break;
 			}
 		}
 		if (tarjetaSeleccionada == null) {
@@ -207,24 +203,34 @@ public class Main {
 			return;
 		}
 
-		long numeroFactura = CollectionFactura.facturas.size() + 1L;
-		Factura factura = new Factura(LocalDate.now(), numeroFactura, cliente, detalles);
-		Credito credito = new Credito(tarjetaSeleccionada, factura, new ArrayList<>());
+		// El constructor valida tarjeta vigente, montos de Ahora 20 y limite de la tarjeta
+		Credito credito = new Credito(tarjetaSeleccionada, factura);
 
-		CollectionCredito.agregarCredito(credito);
-
-		for (int i = 0; i < stocksVendidos.size(); i++) {
-		CollectionStock.reducirStock(stocksVendidos.get(i), cantidadesVendidas.get(i));
+		// Recien cuando el credito es valido se descuenta el stock y se registra la venta
+		for (Detalle detalle : factura.getDetalles()) {
+			CollectionStock.reducirStock(CollectionStock.buscarStock(detalle.getProducto()), detalle.getCantidad());
 		}
 		CollectionFactura.agregarFactura(factura);
-		tarjetaSeleccionada.setLimiteCompra(tarjetaSeleccionada.getLimiteCompra() - factura.calcularTotal());
+		CollectionCredito.agregarCredito(credito);
+		tarjetaSeleccionada.setLimiteCompra(tarjetaSeleccionada.getLimiteCompra() - credito.getMontoCredito());
 
-		System.out.println("Venta realizada correctamente. Compra financiada en 20 cuotas.");
+		System.out.println("Venta realizada correctamente. Compra financiada en " + Credito.CANTIDAD_CUOTAS
+				+ " cuotas.");
 		System.out.println(factura);
 		System.out.printf("Total: $%.2f%n", factura.calcularTotal());
 	}
 
-	private static void consultarCompras() {
+	private static int calcularCantidadCargada(Factura factura, Producto producto) {
+		int cantidad = 0;
+		for (Detalle detalle : factura.getDetalles()) {
+			if (detalle.getProducto().getCodigo() == producto.getCodigo()) {
+				cantidad += detalle.getCantidad();
+			}
+		}
+		return cantidad;
+	}
+
+	private static void consultarCompras() throws ClienteNoEncontradoException {
 		long dni = leerLong("Ingrese el DNI del cliente: ");
 		Cliente cliente = CollectionCliente.buscarCliente(dni);
 		List<Factura> compras = cliente.consultarCompras();
@@ -238,33 +244,33 @@ public class Main {
 		}
 	}
 
-	private static void mostrarProductos() {
-		System.out.println("\n--- Productos disponibles ---");
-		for (Producto producto : CollectionProducto.productos) {
+	private static void mostrarProductosAhora20() {
+		System.out.println("\n--- Electrodomesticos incluidos en Ahora 20 ---");
+		for (Producto producto : CollectionProducto.obtenerProductosAhora20()) {
 			System.out.println(producto);
 		}
 	}
 
 	private static void consultarStock() {
-		System.out.println("\n--- Stock disponible ---");
+		System.out.println("\n--- Stock de electrodomesticos incluidos en Ahora 20 ---");
 		for (Stock stock : CollectionStock.stocks) {
-			System.out.println(stock.getProducto().getCodigo() + " - " + stock.getProducto().getDescripcion()
-					+ " | Cantidad: " + stock.getCantidad());
+			if (stock.getProducto().esFabricacionNacional()) {
+				System.out.println(stock.getProducto().getCodigo() + " - " + stock.getProducto().getDescripcion()
+						+ " | Cantidad: " + stock.getCantidad());
+			}
 		}
 	}
 
-	private static void consultarCreditos() {
+	private static void consultarCreditos() throws ClienteNoEncontradoException {
 		long dni = leerLong("Ingrese el DNI del cliente: ");
 		Cliente cliente = CollectionCliente.buscarCliente(dni);
-		boolean encontroCredito = false;
-		for (Credito credito : CollectionCredito.creditos) {
-			if (credito.getTarjetaCredito().getCliente().getDni() == cliente.getDni()) {
-				credito.mostarCredito();
-				encontroCredito = true;
-			}
-		}
-		if (!encontroCredito) {
+		List<Credito> creditosCliente = CollectionCredito.buscarCreditos(cliente.getDni());
+		if (creditosCliente.isEmpty()) {
 			System.out.println("El cliente no tiene creditos registrados.");
+			return;
+		}
+		for (Credito credito : creditosCliente) {
+			credito.mostrarCredito();
 		}
 	}
 }

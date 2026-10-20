@@ -5,6 +5,7 @@ import java.util.List;
 
 import ar.edu.unju.escmi.tp6.dominio.Producto;
 import ar.edu.unju.escmi.tp6.dominio.Stock;
+import ar.edu.unju.escmi.tp6.exceptions.StockInsuficienteException;
 
 public class CollectionStock {
 
@@ -12,7 +13,6 @@ public class CollectionStock {
 
 	public static void precargarStocks() {
 		if (stocks.isEmpty()) {
-			stocks = new ArrayList<Stock>();
 			stocks.add(new Stock(12, CollectionProducto.productos.get(0)));
 			stocks.add(new Stock(22, CollectionProducto.productos.get(1)));
 			stocks.add(new Stock(13, CollectionProducto.productos.get(2)));
@@ -36,20 +36,21 @@ public class CollectionStock {
 		}
 	}
 
-		public static void agregarStock(Stock stock) {
+	/**
+	 * Agrega el stock de un producto. Si el producto ya tenia stock, lo reemplaza.
+	 */
+	public static void agregarStock(Stock stock) {
 		if (stock == null || stock.getProducto() == null) {
 			throw new IllegalArgumentException("No se puede guardar un stock sin producto");
 		}
-		for (int i = 0; i < stocks.size(); i++) {
-			if (stocks.get(i).getProducto() == stock.getProducto()) {
-				stocks.set(i, stock);
-				return;
-			}
+		Stock stockExistente = buscarStock(stock.getProducto());
+		if (stockExistente != null) {
+			stocks.remove(stockExistente);
 		}
 		stocks.add(stock);
 	}
 
-		public static void reducirStock(Stock stock, int cantidad) {
+	public static void reducirStock(Stock stock, int cantidad) throws StockInsuficienteException {
 		if (stock == null || !stocks.contains(stock)) {
 			throw new IllegalArgumentException("El stock indicado no esta registrado");
 		}
@@ -58,7 +59,7 @@ public class CollectionStock {
 
 	public static Stock buscarStock(Producto producto) {
 		for (Stock sto : stocks) {
-			if (sto.getProducto() == producto) {
+			if (sto.getProducto().getCodigo() == producto.getCodigo()) {
 				return sto;
 			}
 		}

@@ -2,6 +2,7 @@ package ar.edu.unju.escmi.tp6.tests;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import ar.edu.unju.escmi.tp6.dominio.Producto;
@@ -9,16 +10,21 @@ import ar.edu.unju.escmi.tp6.dominio.Stock;
 
 class StockTest {
 
-	// el test se decrementa el stock de un producto en la cantidad indicada
+	public static final int STOCK_INICIAL = 50;
+
+	private Stock stock;
+
+	@BeforeEach
+	void setUp() {
+		Producto producto = new Producto(3112, "Heladera Ciclica Gafa", 160000, "Argentina");
+		stock = new Stock(STOCK_INICIAL, producto);
+	}
+
 	@Test
 	void testDecrementarStock() {
-		Producto producto = new Producto(1L, "Yerba Mate 1kg", 3500, "Argentina", false);
-		Stock stock = new Stock(50, producto);
 		int cantidadADescontar = 10;
-
 		stock.decrementarStock(cantidadADescontar);
-
-		assertEquals(40, stock.getCantidad(),
-				"El stock debería haberse decrementado en la cantidad indicada");
+		assertEquals(STOCK_INICIAL - cantidadADescontar, stock.getCantidad(),
+				"El stock deberia haberse decrementado en la cantidad indicada");
 	}
 }
